@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Iterator, Optional
 
 from book_to_skill.provenance.ids import claim_id, span_hash
-from book_to_skill.provenance.models import Claim, EvidenceSpan
+from book_to_skill.provenance.models import Claim
 
 # An evidence span longer than this is flagged: it stops being "supporting
 # evidence" and starts being a reproduction of the source.

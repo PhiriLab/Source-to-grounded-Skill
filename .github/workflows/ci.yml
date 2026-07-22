@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [master, "claude/**", "feat/**"]
   pull_request:
 
 permissions:
@@ -21,8 +21,8 @@ jobs:
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install pytest
-        run: pip install pytest
+      - name: Install test dependencies
+        run: pip install pytest pyyaml
       - name: Run test suite
         run: pytest tests/ -q
 
@@ -40,7 +40,7 @@ jobs:
         # High-value gate: syntax errors (E9, e.g. IndentationError) + pyflakes
         # (F: undefined names, unused imports). Style rules are intentionally
         # not gated yet to avoid blocking on cosmetic churn.
-        run: ruff check --select E9,F --target-version py310 book_to_skill/ scripts/ tests/ tools/
+        run: ruff check --select E9,F --target-version py310 book_to_skill/ scripts/ tests/ tools/ evaluation/
 
   smoke:
     name: smoke (dependency-free extraction)
@@ -75,9 +75,15 @@ jobs:
         # Hard gate: only HIGH-severity / MEDIUM-confidence findings fail CI, to
         # avoid blocking on the known-acceptable subprocess (pip install) calls.
         # Ratchet down to medium once the open B314 docx-XML finding is hardened.
-        run: bandit -q -r book_to_skill scripts tools --severity-level high --confidence-level medium
+        run: bandit -q -r book_to_skill scripts tools evaluation --severity-level high --confidence-level medium
       - name: Bandit — report MEDIUM+ (informational)
-        run: bandit -q -r book_to_skill scripts tools -ll || true
+        run: bandit -q -r book_to_skill scripts tools evaluation -ll || true
+      - name: pip-audit — dependency vulnerability scan
+        # Audits the installed environment after installing the package's
+        # declared dependencies (currently pyyaml).
+        run: |
+          pip install pip-audit .
+          pip-audit
       - name: Zizmor — workflow audit (informational)
         # Surfaces GitHub Actions risks (injection, pull_request_target misuse).
         # Currently only flags unpinned-uses (tags vs SHA) — non-blocking until

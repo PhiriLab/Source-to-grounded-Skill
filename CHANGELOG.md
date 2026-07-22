@@ -7,6 +7,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] — 2026-07-22 (fork: source-to-grounded-skill)
+
+Fork of upstream book-to-skill at `68888e9`, transformed into a
+provenance-preserving scholarly knowledge compiler.
+
+### Added
+- Security boundary: Unicode/hidden-content sanitisation with audit log,
+  layered deterministic prompt-injection detection, generated-output
+  scanning, severity-gated policy (quarantine at critical in every mode),
+  private staging under `.book-to-skill/staging/` with path-escape and
+  symlink protection.
+- Provenance: claims ledger (JSONL) with evidence spans validated by
+  re-hashing against preserved source text, twelve epistemic statuses,
+  `[SRC:...]`/`[CLM:...]` citation grammar with coverage measurement,
+  modality-preservation checks, `trace` from claim to passage.
+- Review workflow: draft → security-cleared → source-verified →
+  expert-reviewed → published states, REVIEW.md packet, claim-level
+  approve/reject/annotate persisted across regeneration via evidence
+  hashes, deterministic publication gate.
+- Ten declarative domain profiles (scholarly, clinical, CBT, global
+  mental health, cultural adaptation, clinical trial, research cluster,
+  teaching, policy, invention) with loader-enforced non-negotiables.
+- Subcommand CLI (`source-to-skill`): inspect, scan, convert, validate,
+  trace, diff, review, approve/reject/annotate, mark-reviewed, publish,
+  evaluate, profiles. Legacy `book-to-skill <paths>` extraction unchanged.
+- Evaluation harness with fixed release thresholds and an adversarial
+  corpus; `pyyaml` runtime dependency; hierarchical sectioning with
+  YAML structure-map override.
+- Documentation: threat model, privacy model, provenance spec, review
+  guide, migration guide, limitations, fork architecture plan.
+
+### Changed
+- SKILL.md rewritten as grounded generation instructions (staging-only
+  output, ledger-first, citations mandatory, world knowledge off by
+  default, deterministic gates the agent must not bypass).
+- Distribution renamed `source-to-grounded-skill` 2.0.0; import path
+  `book_to_skill` unchanged.
+
+### Removed
+- Committed `scripts/__pycache__` bytecode.
+
 ### Documentation
 - Clarified the two install paths so they are not confused: **`git clone` into a
   skills folder** registers the `/book-to-skill` agent skill (Claude Code / Copilot

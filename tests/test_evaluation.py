@@ -2,7 +2,6 @@
 gates: none of these may be xfail."""
 
 import json
-from pathlib import Path
 
 from evaluation.metrics import (
     ADVERSARIAL_DIR,
