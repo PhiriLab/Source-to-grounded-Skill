@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Packaging: name the wheel package explicitly
+  (`[tool.hatch.build.targets.wheel] packages = ["book_to_skill"]`) so
+  `pip install .` works after the distribution rename — hatchling's
+  default heuristic looked for a `source_to_grounded_skill/` directory
+  and failed.
+
+### Changed
+- CI now triggers on pushes to `main` (the new default branch), so the
+  test/lint/security jobs run on direct pushes there, not only on PRs.
+
 ## [2.0.0] — 2026-07-22 (fork: source-to-grounded-skill)
 
 Fork of upstream book-to-skill at `68888e9`, transformed into a
