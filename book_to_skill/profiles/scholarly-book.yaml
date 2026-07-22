@@ -1,0 +1,71 @@
+name: scholarly-book
+description: >
+  Authored scholarly books: preserve the central argument, its progression,
+  the author's own vocabulary, cases, historical context, normative
+  commitments, internal tensions, and acknowledged limitations.
+
+defaults:
+  world_knowledge: "off"
+  privacy: copyrighted-private
+  citation_mode: claim
+  security: standard
+  require_review: true
+
+outputs:
+  - file: SKILL.md
+    purpose: "entry point: how to use, argument overview, chapter and topic indexes"
+  - file: argument-map.md
+    purpose: "the central argument and its progression, chapter by chapter"
+  - file: frameworks.md
+    purpose: "named frameworks in the author's exact vocabulary"
+  - file: concepts.md
+    purpose: "key concepts with definitions in the author's terms"
+  - file: definitions.md
+    purpose: "glossary with claim-level citations"
+  - file: cases.md
+    purpose: "case material as first-class objects"
+    required: false
+  - file: critique-and-limitations.md
+    purpose: "limitations the author acknowledges plus documented critiques"
+  - file: contradictions.md
+    purpose: "unresolved tensions across chapters — preserved, not harmonised"
+  - file: development-of-argument.md
+    purpose: "how positions and terminology shift across the book"
+    required: false
+  - file: scope-and-limitations.md
+    purpose: "where the book's claims stop: populations, contexts, evidence boundaries"
+  - file: historical-context.md
+    purpose: "intellectual and historical situation of the work"
+    required: false
+  - file: teaching-prompts.md
+    purpose: "questions for seminar or supervision use"
+    required: false
+  - file: provenance/claims.jsonl
+    purpose: "machine-readable claims ledger"
+
+preserve:
+  - the book's central argument and its argumentative progression
+  - concepts in the author's own vocabulary (exact framework names)
+  - case material and worked examples
+  - historical context and normative commitments
+  - unresolved tensions and acknowledged limitations
+  - the author's hedges and qualifications (modality preservation)
+
+constraints:
+  - every substantive claim carries a resolvable [SRC:...] marker
+  - separate the five voices — source statement, close paraphrase, synthesis,
+    external context, reviewer annotation — with explicit labels
+  - contradictions across chapters are recorded, never smoothed into consensus
+  - never copy long raw passages; synthesise and cite
+  - external knowledge only when world_knowledge is labelled, and then visibly
+    marked as not originating in the source
+
+capability_profile:
+  name: scholarly-reference
+  permissions:
+    read_skill_files: true
+    search_skill_files: true
+    shell: false
+    network: false
+    write_files: false
+    access_secrets: false

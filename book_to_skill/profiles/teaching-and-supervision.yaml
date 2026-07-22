@@ -1,0 +1,63 @@
+name: teaching-and-supervision
+description: >
+  Teaching texts and supervision materials: audience-tiered outputs for
+  postgraduate, doctoral, practitioner, supervision, and policy settings.
+
+defaults:
+  world_knowledge: labelled
+  privacy: copyrighted-private
+  citation_mode: claim
+  security: standard
+  require_review: true
+
+outputs:
+  - file: SKILL.md
+    purpose: "entry point and audience-tier index"
+  - file: learning-objectives.md
+    purpose: "objectives per audience tier"
+  - file: seminar-plan.md
+    purpose: "session plans with readings and activities"
+  - file: key-readings.md
+    purpose: "readings with why each is assigned"
+  - file: conceptual-questions.md
+    purpose: "questions that probe understanding, tiered by audience"
+  - file: case-discussions.md
+    purpose: "case discussion prompts grounded in source cases"
+    required: false
+  - file: common-misunderstandings.md
+    purpose: "misconceptions the sources themselves address"
+  - file: supervision-prompts.md
+    purpose: "prompts for supervision settings"
+    required: false
+  - file: assessment-rubric.md
+    purpose: "assessment criteria mapped to objectives"
+  - file: provenance/claims.jsonl
+    purpose: "machine-readable claims ledger"
+
+preserve:
+  - the source's own pedagogical sequence where it has one
+  - worked examples and cases with provenance
+  - the distinction between settled material and contested material
+
+analytical_dimensions:
+  - postgraduate introduction
+  - doctoral seminar
+  - practitioner training
+  - supervision
+  - policy audience
+
+constraints:
+  - teaching prompts about contested material present it as contested
+  - external context (labelled) may scaffold pedagogy but never replaces
+    source content in answers about the source
+  - case discussions never include participant-identifiable material
+
+capability_profile:
+  name: scholarly-reference
+  permissions:
+    read_skill_files: true
+    search_skill_files: true
+    shell: false
+    network: false
+    write_files: false
+    access_secrets: false

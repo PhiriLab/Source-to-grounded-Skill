@@ -1,0 +1,70 @@
+name: clinical-method
+description: >
+  Clinical and psychotherapeutic method texts: educational reference on an
+  intervention model, never a substitute for training, supervision, or
+  clinical judgement.
+
+defaults:
+  world_knowledge: "off"
+  privacy: copyrighted-private
+  citation_mode: claim
+  security: strict
+  require_review: true
+
+outputs:
+  - file: SKILL.md
+    purpose: "entry point with an explicit educational-reference disclaimer"
+  - file: intervention-model.md
+    purpose: "the intervention model and its theoretical basis"
+  - file: mechanisms-of-change.md
+    purpose: "proposed mechanisms of change, with evidence status for each"
+  - file: assessment.md
+    purpose: "assessment approach and instruments"
+  - file: formulation.md
+    purpose: "formulation approach — always represented as hypothesis, not fact"
+  - file: session-structure.md
+    purpose: "session structure and phasing"
+  - file: techniques.md
+    purpose: "techniques with indications and competence requirements"
+  - file: contraindications.md
+    purpose: "contraindications and risk conditions — retention is release-gated at 1.00"
+  - file: adaptations.md
+    purpose: "documented adaptations and their evidence"
+    required: false
+  - file: competency-requirements.md
+    purpose: "where therapist competence or supervision is required"
+  - file: risk-and-safeguarding.md
+    purpose: "risk and safeguarding requirements"
+  - file: evidence-boundaries.md
+    purpose: "what the evidence does and does not cover"
+  - file: contradictions.md
+    purpose: "theory-practice discrepancies and unresolved questions"
+  - file: provenance/claims.jsonl
+    purpose: "machine-readable claims ledger"
+
+preserve:
+  - contraindications and risk conditions, verbatim in meaning
+  - safeguarding requirements and competence boundaries
+  - supervision requirements
+  - mechanisms of change and their evidence status
+  - formulation as hypothesis
+  - evidence limitations and boundary conditions
+
+constraints:
+  - distinguish educational guidance from clinical advice on every page
+  - never generate patient-specific treatment recommendations
+  - never drop a contraindication, however compressed the summary
+  - flag any deviation from the source protocol as such
+  - clinical observation is never presented as trial evidence
+  - a clinical recommendation carried only by editorial inference is
+    blocked from publication until a reviewer signs it off
+
+capability_profile:
+  name: scholarly-reference
+  permissions:
+    read_skill_files: true
+    search_skill_files: true
+    shell: false
+    network: false
+    write_files: false
+    access_secrets: false

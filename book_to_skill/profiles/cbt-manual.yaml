@@ -1,0 +1,69 @@
+name: cbt-manual
+description: >
+  CBT and structured-psychotherapy manuals: session-by-session educational
+  reference preserving protocol fidelity markers, contraindications, and
+  competence boundaries. Inherits every clinical-method constraint.
+
+defaults:
+  world_knowledge: "off"
+  privacy: copyrighted-private
+  citation_mode: claim
+  security: strict
+  require_review: true
+
+outputs:
+  - file: SKILL.md
+    purpose: "entry point with an explicit educational-reference disclaimer"
+  - file: intervention-model.md
+    purpose: "the CBT model variant and its cognitive-behavioural rationale"
+  - file: mechanisms-of-change.md
+    purpose: "proposed mechanisms (e.g. cognitive restructuring, exposure) with evidence status"
+  - file: assessment.md
+    purpose: "assessment, measures, and formulation-relevant intake"
+  - file: formulation.md
+    purpose: "CBT formulation templates — always hypothesis, never fact"
+  - file: session-structure.md
+    purpose: "session-by-session structure, agendas, and homework"
+  - file: techniques.md
+    purpose: "techniques with steps, indications, and competence requirements"
+  - file: worksheets-and-measures.md
+    purpose: "worksheets and measures as first-class objects with provenance"
+    required: false
+  - file: contraindications.md
+    purpose: "contraindications and risk conditions — retention release-gated at 1.00"
+  - file: adaptations.md
+    purpose: "cultural and delivery adaptations documented in the manual"
+    required: false
+  - file: competency-requirements.md
+    purpose: "training, competence, and supervision requirements"
+  - file: risk-and-safeguarding.md
+    purpose: "risk protocols and safeguarding"
+  - file: evidence-boundaries.md
+    purpose: "trial populations and settings the evidence actually covers"
+  - file: provenance/claims.jsonl
+    purpose: "machine-readable claims ledger"
+
+preserve:
+  - session ordering and protocol fidelity markers
+  - contraindications, risk conditions, and safeguarding requirements
+  - homework and worksheet content as designed
+  - the distinction between the manual's evidence base and its clinical lore
+  - competence and supervision boundaries
+
+constraints:
+  - distinguish educational guidance from clinical advice on every page
+  - never generate patient-specific treatment recommendations
+  - never drop a contraindication
+  - preserve where the manual requires supervision or specific training
+  - deviations from the source protocol are flagged as deviations
+  - formulation is presented as hypothesis
+
+capability_profile:
+  name: scholarly-reference
+  permissions:
+    read_skill_files: true
+    search_skill_files: true
+    shell: false
+    network: false
+    write_files: false
+    access_secrets: false

@@ -1,0 +1,71 @@
+name: cultural-adaptation
+description: >
+  Cultural adaptation frameworks and studies: structured comparison of what
+  is adapted, what is preserved, and on what evidence. Never infers a
+  person's culture from nationality or ethnicity.
+
+defaults:
+  world_knowledge: "off"
+  privacy: copyrighted-private
+  citation_mode: claim
+  security: standard
+  require_review: true
+
+outputs:
+  - file: SKILL.md
+    purpose: "entry point and indexes"
+  - file: adaptation-matrix.md
+    purpose: "structured matrix: construct, original formulation, target context, surface vs deep-structure adaptation, mechanism preserved/altered, language, metaphor, social relationships, spiritual or moral framework, delivery context, evidence, uncertainty"
+  - file: frameworks.md
+    purpose: "adaptation frameworks compared (ecological validity, cultural sensitivity, cultural formulation, surface vs deep, mechanism-preserving, co-production)"
+  - file: mechanisms.md
+    purpose: "which mechanisms of change each adaptation claims to preserve or alter"
+  - file: language-and-idiom.md
+    purpose: "language, metaphor, and idiom-of-distress material"
+  - file: evidence.md
+    purpose: "evidence per adaptation claim with population and setting scope"
+  - file: uncertainty.md
+    purpose: "where the sources acknowledge not knowing"
+  - file: contradictions.md
+    purpose: "disagreements between adaptation frameworks — preserved"
+  - file: provenance/claims.jsonl
+    purpose: "machine-readable claims ledger"
+
+preserve:
+  - the distinction between surface and deep-structure adaptation
+  - mechanism-preservation claims and their evidence
+  - within-group heterogeneity wherever the source records it
+  - co-production and community participation processes
+
+analytical_dimensions:
+  - construct
+  - original formulation
+  - target context
+  - surface adaptation
+  - deep-structure adaptation
+  - mechanism preserved
+  - mechanism altered
+  - language issue
+  - metaphor or idiom
+  - social relationship
+  - spiritual or moral framework
+  - delivery context
+  - evidence
+  - uncertainty
+
+constraints:
+  - never infer a population's culture from nationality or ethnicity alone
+  - never collapse cultural difference into fixed group traits
+  - adaptation claims keep their target-context scope
+  - evidence for an adaptation is never borrowed from a different context
+    without the borrowing being explicit
+
+capability_profile:
+  name: scholarly-reference
+  permissions:
+    read_skill_files: true
+    search_skill_files: true
+    shell: false
+    network: false
+    write_files: false
+    access_secrets: false

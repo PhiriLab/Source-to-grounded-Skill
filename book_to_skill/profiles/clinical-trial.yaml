@@ -1,0 +1,72 @@
+name: clinical-trial
+description: >
+  Trial documentation (protocols, SAPs, registrations, publications,
+  supplements): structured extraction of design and analysis, with
+  cross-document inconsistencies surfaced rather than reconciled.
+
+defaults:
+  world_knowledge: "off"
+  privacy: institutional-confidential
+  citation_mode: claim
+  security: strict
+  require_review: true
+
+outputs:
+  - file: SKILL.md
+    purpose: "entry point and indexes"
+  - file: research-question.md
+    purpose: "research question(s) as registered and as published"
+  - file: pico.md
+    purpose: "PICO/PICOTS structured extraction"
+  - file: theory-of-change.md
+    purpose: "theory of change and logic model"
+  - file: estimands.md
+    purpose: "estimands, intercurrent-event strategies, analysis populations"
+  - file: design.md
+    purpose: "design, allocation, masking, timepoints"
+  - file: randomisation.md
+    purpose: "randomisation and allocation concealment"
+  - file: intervention.md
+    purpose: "intervention description and fidelity"
+  - file: control-condition.md
+    purpose: "comparator and its justification"
+  - file: outcomes.md
+    purpose: "outcomes with definitions, instruments, and timepoints"
+  - file: analysis-plan.md
+    purpose: "statistical analysis plan essentials"
+  - file: missing-data.md
+    purpose: "missing-data strategy"
+  - file: adverse-events.md
+    purpose: "adverse-event definitions and reporting"
+  - file: implementation.md
+    purpose: "implementation and delivery context"
+  - file: limitations.md
+    purpose: "limitations as stated, per document"
+  - file: inconsistencies.md
+    purpose: "differences between protocol, SAP, registration, publication, and supplements — reported, not reconciled"
+  - file: trial-structured.json
+    purpose: "machine-readable population/intervention/comparator/outcomes/estimands/timepoints/analysis-populations"
+  - file: provenance/claims.jsonl
+    purpose: "machine-readable claims ledger"
+
+preserve:
+  - which document each claim comes from (protocol vs SAP vs paper)
+  - registered vs published outcome sets, including discrepancies
+  - analysis-population definitions verbatim in meaning
+  - adverse events and their attribution language
+
+constraints:
+  - never merge documents into one harmonised account; inconsistencies are findings
+  - trial results keep their population, comparator, and timepoint scope
+  - no efficacy language beyond what the source documents state
+  - participant-level information never enters generated files
+
+capability_profile:
+  name: scholarly-reference
+  permissions:
+    read_skill_files: true
+    search_skill_files: true
+    shell: false
+    network: false
+    write_files: false
+    access_secrets: false

@@ -1,0 +1,56 @@
+name: invention-and-design
+description: >
+  Books, design notes, and research feeding a design knowledge base.
+  Generated ideas are never represented as patent novelty conclusions.
+
+defaults:
+  world_knowledge: labelled
+  privacy: institutional-confidential
+  citation_mode: claim
+  security: standard
+  require_review: true
+
+outputs:
+  - file: SKILL.md
+    purpose: "entry point and indexes"
+  - file: problem-definition.md
+    purpose: "the problem as the sources define it"
+  - file: design-principles.md
+    purpose: "principles with their source rationale"
+  - file: requirements.md
+    purpose: "functional and non-functional requirements with provenance"
+  - file: mechanism.md
+    purpose: "mechanisms and how the sources justify them"
+  - file: assumptions.md
+    purpose: "assumptions, explicit and detected"
+  - file: failure-modes.md
+    purpose: "failure modes and mitigations from the sources"
+  - file: ethical-risks.md
+    purpose: "ethical risks and who bears them"
+  - file: implementation-constraints.md
+    purpose: "materials, regulatory, and context constraints"
+  - file: validation-plan.md
+    purpose: "how claims would be tested"
+  - file: provenance/claims.jsonl
+    purpose: "machine-readable claims ledger"
+
+preserve:
+  - which claims are sourced versus editorial design synthesis
+  - constraint provenance (regulatory vs physical vs preference)
+  - failure modes and their evidence
+
+constraints:
+  - no patent novelty or freedom-to-operate conclusions, ever
+  - design synthesis is marked editorial_inference or
+    cross_source_synthesis, never presented as sourced fact
+  - external engineering knowledge is labelled when world_knowledge allows it
+
+capability_profile:
+  name: scholarly-reference
+  permissions:
+    read_skill_files: true
+    search_skill_files: true
+    shell: false
+    network: false
+    write_files: false
+    access_secrets: false

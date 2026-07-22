@@ -1,0 +1,57 @@
+name: policy-and-implementation
+description: >
+  Policy documents, regulatory texts, and implementation guidance: precise
+  obligations, scopes, and definitions, with the normative and the
+  empirical kept distinct.
+
+defaults:
+  world_knowledge: "off"
+  privacy: institutional-confidential
+  citation_mode: claim
+  security: standard
+  require_review: true
+
+outputs:
+  - file: SKILL.md
+    purpose: "entry point and indexes"
+  - file: obligations.md
+    purpose: "who must do what, under which provision, from when"
+  - file: definitions.md
+    purpose: "defined terms exactly as defined, with provision references"
+  - file: scope-and-applicability.md
+    purpose: "who and what is covered, exclusions, thresholds"
+  - file: timelines.md
+    purpose: "commencement, transition, and compliance dates"
+    required: false
+  - file: enforcement.md
+    purpose: "enforcement mechanisms and penalties"
+    required: false
+  - file: implementation-guidance.md
+    purpose: "implementation guidance distinct from binding obligation"
+  - file: ambiguities.md
+    purpose: "provisions whose meaning is unsettled — flagged, not resolved"
+  - file: provenance/claims.jsonl
+    purpose: "machine-readable claims ledger"
+
+preserve:
+  - exact defined terms and provision numbering
+  - the distinction between binding obligation and guidance
+  - stated commencement and transition arrangements
+  - which jurisdiction and instrument each claim belongs to
+
+constraints:
+  - never paraphrase a defined term into ordinary language without also
+    giving the defined form
+  - never present guidance as obligation or vice versa
+  - interpretation beyond the text is editorial_inference and labelled
+  - this skill is reference material, not legal advice — say so in SKILL.md
+
+capability_profile:
+  name: scholarly-reference
+  permissions:
+    read_skill_files: true
+    search_skill_files: true
+    shell: false
+    network: false
+    write_files: false
+    access_secrets: false

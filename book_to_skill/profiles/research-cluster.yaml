@@ -1,0 +1,56 @@
+name: research-cluster
+description: >
+  A body of papers and books on one programme or question: mapped as a
+  cluster whose claims stay study-specific. Heterogeneous populations and
+  outcomes are never merged because the language sounds similar.
+
+defaults:
+  world_knowledge: "off"
+  privacy: copyrighted-private
+  citation_mode: claim
+  security: standard
+  require_review: true
+
+outputs:
+  - file: SKILL.md
+    purpose: "entry point and indexes"
+  - file: evidence-map.md
+    purpose: "map of studies, questions, and findings"
+  - file: study-matrix.csv
+    purpose: "one row per study: design, population, setting, N, outcomes, findings, limitations"
+  - file: conceptual-crosswalk.md
+    purpose: "how constructs and terms map (or fail to map) across studies"
+  - file: methodological-heterogeneity.md
+    purpose: "design and measurement differences that block pooling"
+  - file: contradictory-findings.md
+    purpose: "findings that disagree — preserved with their scopes"
+  - file: agreements.md
+    purpose: "convergent findings, with the scope within which they converge"
+  - file: research-gaps.md
+    purpose: "questions the cluster does not answer"
+  - file: future-studies.md
+    purpose: "study designs the sources themselves call for"
+    required: false
+  - file: provenance/claims.jsonl
+    purpose: "machine-readable claims ledger"
+
+preserve:
+  - study-level scope on every claim (population, setting, design, N)
+  - construct differences hiding behind shared terminology
+  - publication and registry identifiers per study
+
+constraints:
+  - claims remain study-specific; cross-study synthesis is explicitly
+    marked cross_source_synthesis and cites every study involved
+  - no pooling of heterogeneous populations or outcomes
+  - disagreement between studies is a first-class output, not noise
+
+capability_profile:
+  name: scholarly-reference
+  permissions:
+    read_skill_files: true
+    search_skill_files: true
+    shell: false
+    network: false
+    write_files: false
+    access_secrets: false

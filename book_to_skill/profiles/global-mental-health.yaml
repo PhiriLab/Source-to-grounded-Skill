@@ -1,0 +1,71 @@
+name: global-mental-health
+description: >
+  Global mental health texts: context, systems, equity, and power are
+  analytical dimensions of the schema, not decorative ethics paragraphs.
+
+defaults:
+  world_knowledge: "off"
+  privacy: copyrighted-private
+  citation_mode: claim
+  security: standard
+  require_review: true
+
+outputs:
+  - file: SKILL.md
+    purpose: "entry point and indexes"
+  - file: context.md
+    purpose: "the settings and health systems the source actually concerns"
+  - file: health-system-levels.md
+    purpose: "claims organised by health-system level"
+  - file: social-determinants.md
+    purpose: "social determinants as the source treats them"
+  - file: task-sharing.md
+    purpose: "task-sharing models, workforce, and training claims"
+  - file: implementation-barriers.md
+    purpose: "implementation barriers and enabling conditions"
+  - file: equity.md
+    purpose: "distribution of benefits and burdens"
+  - file: power-and-positionality.md
+    purpose: "whose categories and interests structure the intervention"
+  - file: cultural-and-linguistic-context.md
+    purpose: "translation, idioms of distress, construct equivalence"
+  - file: measurement-validity.md
+    purpose: "whether instruments and constructs travel across settings"
+  - file: ethical-tensions.md
+    purpose: "tensions the source leaves unresolved — preserved as tensions"
+  - file: contradictions.md
+    purpose: "disagreements within and across sources"
+  - file: provenance/claims.jsonl
+    purpose: "machine-readable claims ledger"
+
+preserve:
+  - which setting and population each claim is about (no silent universalising)
+  - construct and measurement validity caveats
+  - colonial and institutional inheritance where the source addresses it
+  - workforce and health-system constraints
+  - the difference between efficacy evidence and implementation evidence
+
+analytical_dimensions:
+  - whose categories are being universalised
+  - whether evidence travels across settings
+  - translation and construct equivalence
+  - colonial and institutional inheritance
+  - workforce and health-system constraints
+  - distribution of benefits and burdens
+  - whether scalability displaces questions of dignity, labour, or care
+
+constraints:
+  - every claim retains its setting and population scope
+  - claims of being evidence-based are qualified by where the evidence comes from
+  - equity and power content is extracted as claims, not summarised away
+  - contested positions between authors are preserved as contested
+
+capability_profile:
+  name: scholarly-reference
+  permissions:
+    read_skill_files: true
+    search_skill_files: true
+    shell: false
+    network: false
+    write_files: false
+    access_secrets: false
