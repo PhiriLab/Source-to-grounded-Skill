@@ -48,10 +48,23 @@ _AGENT_ADDRESS = re.compile(
     r"^\s*(?:dear|attention|note\s+to|hey|hello)?,?\s*(?:ai|assistant|agent|model|claude|copilot|llm)\b[^.\n]{0,80}[:,]",
     re.IGNORECASE,
 )
-_IMPERATIVE_CAPABILITY = re.compile(
-    r"\b(?:run|execute|open|read|write|modify|delete|access|fetch|download|install)\b"
+# Capability requests are only an injection signal when they reach a
+# *sensitive* target. Imperatives that reach only a generic target ("open the
+# file", "run the command", "download the dataset") are the everyday language
+# of software manuals, lab protocols and teaching texts, so on their own they
+# produce NO finding — this is the specificity fix that keeps the scanner
+# usable on procedural sources (regression fixtures in evaluation/fixtures).
+# Real capability-request injection targets the shell, credentials, the
+# network, or agent-config paths; that stays HIGH.
+_IMPERATIVE_SENSITIVE = re.compile(
+    r"\b(?:run|execute|open|read|write|modify|delete|access|fetch|download|"
+    r"install|send|upload|exfiltrate|reveal|leak)\b"
     r"[^.\n]{0,60}?"
-    r"\b(?:file|folder|directory|shell|terminal|command|credential|password|token|api\s+key|environment\s+variable|network|url|endpoint)s?\b",
+    r"(?:\b(?:shell|terminal|bash|zsh|credential|password|passphrase|token|"
+    r"api\s*key|secret|environment\s+variable|env\s+var|ssh\s+key|"
+    r"private\s+key|network|endpoint|webhook)s?\b"
+    r"|~/\.(?:claude|copilot|agents|config|ssh|aws)\b"
+    r"|/etc/(?:passwd|shadow)\b)",
     re.IGNORECASE,
 )
 _FORMAT_REDEFINITION = re.compile(
@@ -127,7 +140,7 @@ def scan_for_injection(text: str, source_id: str = "source") -> FindingsReport:
                 detector="injection.layer_b.agent_address",
             ))
         elif _STARTS_IMPERATIVE.search(stripped):
-            if _IMPERATIVE_CAPABILITY.search(stripped):
+            if _IMPERATIVE_SENSITIVE.search(stripped):
                 report.add(SecurityFinding(
                     risk=Severity.HIGH,
                     category="indirect_prompt_injection",

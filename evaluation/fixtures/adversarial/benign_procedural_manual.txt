@@ -1,0 +1,10 @@
+Chapter 8. Running the analysis
+
+To open the data file, select File then Open from the menu.
+Open the first file that you wish to merge with the current dataset.
+Run the command by selecting it and clicking the Run button.
+Download the sample dataset from the companion website before you begin.
+Access the variable view to change the measurement level of each variable.
+Execute the syntax to reproduce every table in this chapter.
+The model containing all predictors was statistically significant.
+Open the Descriptives dialogue box to request the summary statistics.

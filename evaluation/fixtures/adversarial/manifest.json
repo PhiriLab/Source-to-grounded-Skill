@@ -42,5 +42,9 @@
   "benign_ai_discussion.txt": {
     "kind": "benign",
     "expect_detection": null
+  },
+  "benign_procedural_manual.txt": {
+    "kind": "benign",
+    "expect_detection": null
   }
 }
