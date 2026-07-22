@@ -1,6 +1,15 @@
 *.pyc
 __pycache__/
 
+# Private working artifacts — NEVER commit source material or generated stages.
+# The converter writes preserved source text (incl. whole books) under its
+# staging root; these must stay local. Keep the old name too for safety.
+.source-to-skill/
+.book-to-skill/
+output/
+*.ocr.txt
+*.source.pdf
+
 # Agent session traces (Stone CLI) — never commit
 .stone/
 **/.stone/

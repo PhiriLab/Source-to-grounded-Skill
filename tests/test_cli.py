@@ -50,7 +50,7 @@ def _convert(tmp_path, book, *extra):
         "convert", str(book), "--skill-id", "cultural-encounter",
         "--profile", "scholarly-book", "--output", str(tmp_path), *extra,
     ])
-    staged = tmp_path / ".book-to-skill" / "staging" / "cultural-encounter"
+    staged = tmp_path / ".source-to-skill" / "staging" / "cultural-encounter"
     return rc, staged
 
 
@@ -111,7 +111,7 @@ class TestConvert:
         assert rc == 2
         assert not (staged / "provenance" / "manifest.json").exists()
         # Critical findings quarantine the source copy
-        assert list((tmp_path / ".book-to-skill" / "quarantine").rglob("bad.txt"))
+        assert list((tmp_path / ".source-to-skill" / "quarantine").rglob("bad.txt"))
 
     def test_structure_map_overrides_detection(self, tmp_path, book):
         smap = tmp_path / "map.yaml"

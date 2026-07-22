@@ -18,7 +18,7 @@ baseline: commit `68888e9`, see UPSTREAM.md).
 
 | Upstream | Fork |
 |---|---|
-| Agent generates directly into a live skills root (`~/.claude/skills/...`) | Generation goes to `.book-to-skill/staging/<skill-id>/`; `publish` is explicit and gated |
+| Agent generates directly into a live skills root (`~/.claude/skills/...`) | Generation goes to `.source-to-skill/staging/<skill-id>/`; `publish` is explicit and gated |
 | No security boundary on document content | Sanitisation + layered injection scan gate generation; generated output is scanned before publication |
 | Free-form summarisation per SKILL.md | Claims ledger first; prose is downstream and citation-marked (`[SRC:...]`) |
 | No review workflow | draft → security-cleared → source-verified → expert-reviewed → published, with claim-level approve/reject that survives regeneration |
@@ -35,7 +35,7 @@ pipeline:
 ```bash
 source-to-skill convert book.pdf --skill-id my-book --profile scholarly-book --output .
 # host agent generates per the new SKILL.md
-source-to-skill validate .book-to-skill/staging/my-book
+source-to-skill validate .source-to-skill/staging/my-book
 ```
 
 Keep the old skill until the new one reaches `published`; the old one can

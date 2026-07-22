@@ -18,6 +18,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI now triggers on pushes to `main` (the new default branch), so the
   test/lint/security jobs run on direct pushes there, not only on PRs.
 
+### Security / Privacy
+- The working-artifact directories are now git-ignored by default
+  (`.source-to-skill/`, the legacy `.book-to-skill/`, `output/`, `*.ocr.txt`,
+  `*.source.pdf`). The converter writes preserved source text (including whole
+  books) under its staging root; ignoring these by default prevents copyrighted
+  or private source material from ever being committed to a shared repository.
+
+### Changed
+- The staging root is renamed from `.book-to-skill/` to `.source-to-skill/`
+  so the working directory matches the product identity. Existing
+  `.book-to-skill/` stages still resolve when passed by explicit path.
+- Consolidated to a single console command, `source-to-skill`; the duplicate
+  `book-to-skill` command was removed to avoid two names for one tool.
+
 ## [2.0.0] — 2026-07-22 (fork: source-to-grounded-skill)
 
 Fork of upstream book-to-skill at `68888e9`, transformed into a

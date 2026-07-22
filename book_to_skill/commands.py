@@ -5,8 +5,8 @@ extraction, synthesis) is done by the host agent following SKILL.md against
 a staging area this CLI prepares and later validates.
 
 Backward compatibility: invocations whose first argument is not a known
-subcommand fall through to the upstream extraction behaviour, so existing
-`book-to-skill <paths>` usage keeps working.
+subcommand fall through to the upstream extraction behaviour, so
+`source-to-skill <paths>` still runs plain extraction.
 """
 
 from __future__ import annotations
@@ -513,7 +513,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--citation-mode", choices=("claim", "section"), default="claim")
     p.add_argument("--security", choices=("strict", "standard", "permissive"),
                    default=None)
-    p.add_argument("--output", default=".", help="project root for .book-to-skill/staging")
+    p.add_argument("--output", default=".", help="project root for .source-to-skill/staging")
     p.add_argument("--structure-map", default=None)
     p.add_argument("--redact-identifiers", action="store_true")
     p.add_argument("--no-network", action="store_true",

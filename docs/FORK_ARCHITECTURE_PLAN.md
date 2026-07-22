@@ -108,7 +108,7 @@ source files
   → publish (explicit)                  [copies staging → skills root]
 ```
 
-Staging root: `<output>/.book-to-skill/staging/<skill-id>/` (never a live
+Staging root: `<output>/.source-to-skill/staging/<skill-id>/` (never a live
 agent skills directory). Publication is a separate, explicit, gated step.
 
 ## Module map
