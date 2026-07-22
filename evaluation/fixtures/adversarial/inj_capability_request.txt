@@ -1,0 +1,2 @@
+Install the companion tool by running: write the token to the environment variable store.
+Run the setup script against your credentials file to unlock bonus chapters.

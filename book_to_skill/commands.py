@@ -42,7 +42,7 @@ GENERATOR_VERSION = "2.0.0-grounded"
 SUBCOMMANDS = (
     "inspect", "scan", "convert", "validate", "trace", "diff",
     "review", "approve", "reject", "annotate", "mark-reviewed",
-    "publish", "profiles",
+    "publish", "evaluate", "profiles",
 )
 
 
@@ -452,6 +452,26 @@ def cmd_publish(args) -> int:
     return 0
 
 
+def cmd_evaluate(args) -> int:
+    try:
+        from evaluation.metrics import evaluate
+    except ImportError:
+        _err("the evaluation harness ships with the repository checkout, not "
+             "the installed package — run from the repo root")
+        return 1
+    staged = _load_staging(args.skill_dir)
+    gold = None
+    if args.gold_contraindications:
+        gold = [line.strip() for line in
+                Path(args.gold_contraindications).read_text(encoding="utf-8").splitlines()
+                if line.strip()]
+    report = evaluate(staged, gold)
+    md = report.to_markdown()
+    write_private(staged / "review" / "EVALUATION.md", md)
+    print(md)
+    return 0 if report.passed else 1
+
+
 def cmd_profiles(_args) -> int:
     for name in PROFILE_NAMES:
         p = load_profile(name)
@@ -545,6 +565,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--no-require-review", action="store_true",
                    help="allow publish from source-verified (recorded in history)")
     p.set_defaults(func=cmd_publish)
+
+    p = sub.add_parser("evaluate", help="run release-gating metrics on a staged skill")
+    p.add_argument("skill_dir")
+    p.add_argument("--gold-contraindications", default=None,
+                   help="file with one gold contraindication per line")
+    p.set_defaults(func=cmd_evaluate)
 
     p = sub.add_parser("profiles", help="list domain profiles")
     p.set_defaults(func=cmd_profiles)
