@@ -1,6 +1,6 @@
 """Staged output layout: generation never writes into a live skills root.
 
-Layout under <project>/.book-to-skill/:
+Layout under <project>/.source-to-skill/:
 
     staging/<skill-id>/
         SKILL.md, chapters/, ...      # generated artifacts (draft)
@@ -28,7 +28,7 @@ import re
 import shutil
 from pathlib import Path
 
-STAGING_ROOT_NAME = ".book-to-skill"
+STAGING_ROOT_NAME = ".source-to-skill"
 
 _SLUG = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
 

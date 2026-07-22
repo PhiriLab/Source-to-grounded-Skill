@@ -31,7 +31,7 @@ source files
   → sanitisation                   (NFC, bidi/zero-width removal, audit log;
                                     originals preserved verbatim)
   → injection scan                 (layered, deterministic; severity gates)
-  → staged corpus                  (.book-to-skill/staging/<skill-id>/ —
+  → staged corpus                  (.source-to-skill/staging/<skill-id>/ —
                                     never a live skills directory)
   → claims ledger + skill files    (host agent, per SKILL.md: evidence spans
                                     with exact offsets, [SRC:...] citations)
@@ -45,20 +45,21 @@ source files
 ## Quick start
 
 ```bash
-pip install .                      # installs source-to-skill (and book-to-skill)
+pip install .                      # installs the `source-to-skill` command
 
 source-to-skill convert book.pdf --skill-id my-book --profile scholarly-book --output .
 # ... host agent (Claude Code / Copilot CLI / Amp) generates per SKILL.md ...
-source-to-skill validate .book-to-skill/staging/my-book
-source-to-skill review   .book-to-skill/staging/my-book
-source-to-skill trace CLM-000001 --skill .book-to-skill/staging/my-book
-source-to-skill approve CLM-000001 --skill .book-to-skill/staging/my-book --reviewer you
-source-to-skill mark-reviewed .book-to-skill/staging/my-book --reviewer you
-source-to-skill publish .book-to-skill/staging/my-book --to ~/.claude/skills
+source-to-skill validate .source-to-skill/staging/my-book
+source-to-skill review   .source-to-skill/staging/my-book
+source-to-skill trace CLM-000001 --skill .source-to-skill/staging/my-book
+source-to-skill approve CLM-000001 --skill .source-to-skill/staging/my-book --reviewer you
+source-to-skill mark-reviewed .source-to-skill/staging/my-book --reviewer you
+source-to-skill publish .source-to-skill/staging/my-book --to ~/.claude/skills
 ```
 
 `source-to-skill scan|inspect|diff|evaluate|profiles` round out the CLI.
-Plain `book-to-skill <paths>` (upstream extraction) still works.
+Plain `source-to-skill <paths>` (no subcommand) runs the legacy
+plain-extraction path.
 
 ## Domain profiles
 

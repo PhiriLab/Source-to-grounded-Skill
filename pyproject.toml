@@ -21,7 +21,9 @@ license = { text = "MIT" }
 dependencies = ["pyyaml"]
 
 [project.scripts]
-book-to-skill = "book_to_skill.cli:main"
+# Single canonical command. (The old `book-to-skill` alias was removed to
+# avoid two names for one tool; `source-to-skill <paths>` still runs the
+# legacy plain-extraction path when the first argument isn't a subcommand.)
 source-to-skill = "book_to_skill.cli:main"
 
 [project.optional-dependencies]

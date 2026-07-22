@@ -26,7 +26,7 @@ remains traceable to an identifiable source passage.
 
 Three consequences you must never work around:
 
-1. **Generation happens in staging** (`.book-to-skill/staging/<skill-id>/`),
+1. **Generation happens in staging** (`.source-to-skill/staging/<skill-id>/`),
    never directly in a live skills directory. Publication is a separate,
    explicit, human-gated step.
 2. **The claims ledger comes first.** Prose is downstream of the ledger;

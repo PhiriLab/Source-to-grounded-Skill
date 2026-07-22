@@ -19,9 +19,9 @@ metadata and enforced at the points the pipeline controls.
 - The pipeline itself makes **no network calls** in any mode; extraction
   and scanning are local. `--no-network` is accepted for compatibility and
   as a statement of intent.
-- Quarantined sources are copies under `.book-to-skill/quarantine/`, same
+- Quarantined sources are copies under `.source-to-skill/quarantine/`, same
   permissions.
-- Working data lives under the project's `.book-to-skill/`; deleting that
+- Working data lives under the project's `.source-to-skill/`; deleting that
   directory removes every intermediate. Nothing is written to shared temp
   locations by the grounded pipeline (the legacy extraction path keeps
   upstream's `$BOOK_SKILL_WORKDIR` behaviour).
