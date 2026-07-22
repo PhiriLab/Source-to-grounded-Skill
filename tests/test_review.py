@@ -140,6 +140,50 @@ class TestDecisions:
         assert fresh.get("CLM-000001").decision == "rejected"
 
 
+class TestFindingAdjudication:
+    def _findings_file(self, tmp_path):
+        from book_to_skill.security.findings import FindingsReport, SecurityFinding, Severity
+        report = FindingsReport(findings=[
+            SecurityFinding(risk=Severity.HIGH, category="indirect_prompt_injection",
+                            source_id="SRC-x", evidence="Open the first file to merge.",
+                            recommended_action="stop",
+                            location={"line": 12, "start_char": 40, "end_char": 70},
+                            detector="injection.layer_b.capability_request"),
+        ])
+        path = tmp_path / "security" / "source_findings.jsonl"
+        report.write_jsonl(path)
+        return path
+
+    def test_adjudicate_records_without_editing_findings(self, tmp_path):
+        from book_to_skill.review.findings_review import (
+            AdjudicationStore, FindingAdjudication, finding_fingerprint)
+        from book_to_skill.security.findings import FindingsReport
+        findings_path = self._findings_file(tmp_path)
+        before = findings_path.read_text(encoding="utf-8")
+
+        finding = FindingsReport.read_jsonl(findings_path).findings[0].to_dict()
+        store = AdjudicationStore(tmp_path / "security" / "finding_adjudications.jsonl")
+        store.record(FindingAdjudication(
+            fingerprint=finding_fingerprint(finding), finding_index=1,
+            decision="false_positive", reviewer="expert",
+            reason="procedural SPSS instruction", timestamp="2026-07-22T00:00:00Z"))
+
+        # immutable findings file untouched
+        assert findings_path.read_text(encoding="utf-8") == before
+        # decision persists and reloads
+        reloaded = AdjudicationStore(tmp_path / "security" / "finding_adjudications.jsonl")
+        assert reloaded.decision_map()[finding_fingerprint(finding)] == "false_positive"
+
+    def test_adjudication_requires_reason_and_valid_decision(self):
+        from book_to_skill.review.findings_review import FindingAdjudication
+        with pytest.raises(ValueError):
+            FindingAdjudication(fingerprint="FND-x", finding_index=1, decision="false_positive",
+                                reviewer="r", reason="  ", timestamp="t")
+        with pytest.raises(ValueError):
+            FindingAdjudication(fingerprint="FND-x", finding_index=1, decision="maybe",
+                                reviewer="r", reason="x", timestamp="t")
+
+
 class TestPacket:
     def test_packet_sections_present(self):
         ledger = _ledger()

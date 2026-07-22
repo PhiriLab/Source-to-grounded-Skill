@@ -24,6 +24,11 @@ from book_to_skill.provenance.ledger import ClaimsLedger
 from book_to_skill.provenance.models import GenerationManifest, PRIVACY_CLASSES, Source
 from book_to_skill.provenance.trace import trace_claim
 from book_to_skill.review.decisions import DecisionStore
+from book_to_skill.review.findings_review import (
+    AdjudicationStore,
+    FindingAdjudication,
+    finding_fingerprint,
+)
 from book_to_skill.review.packet import build_review_packet
 from book_to_skill.review.state import SkillState, publication_gate, utc_now
 from book_to_skill.security import (
@@ -45,8 +50,8 @@ MIN_EXTRACTED_WORDS = 30
 
 SUBCOMMANDS = (
     "inspect", "scan", "convert", "validate", "trace", "diff",
-    "review", "approve", "reject", "annotate", "mark-reviewed",
-    "publish", "evaluate", "profiles",
+    "review", "review-finding", "approve", "reject", "annotate",
+    "mark-reviewed", "publish", "evaluate", "profiles",
 )
 
 
@@ -300,6 +305,8 @@ def cmd_validate(args) -> int:
     missing = [f for f in profile.required_files
                if not (staged / f).exists()]
 
+    adjudications = AdjudicationStore(
+        staged / "security" / "finding_adjudications.jsonl").decision_map()
     packet = build_review_packet(
         ledger, source_findings, output_findings, ledger_problems,
         citation_problems, uncited,
@@ -307,6 +314,7 @@ def cmd_validate(args) -> int:
             json.loads((staged / "provenance" / "structure_warnings.json").read_text(encoding="utf-8"))
             if (staged / "provenance" / "structure_warnings.json").exists() else []
         ) + [f"missing required output: {m}" for m in missing],
+        finding_adjudications=adjudications,
     )
     write_private(staged / "review" / "REVIEW.md", packet)
 
@@ -387,6 +395,32 @@ def cmd_review(args) -> int:
         _err("no REVIEW.md — run `source-to-skill validate` first")
         return 1
     print(packet.read_text(encoding="utf-8"))
+    return 0
+
+
+def cmd_review_finding(args) -> int:
+    """Adjudicate a source-scan finding (accepted | false-positive) without
+    ever editing the immutable findings file."""
+    staged = _load_staging(args.skill_dir)
+    report = FindingsReport.read_jsonl(staged / "security" / "source_findings.jsonl")
+    n = len(report.findings)
+    if not (1 <= args.index <= n):
+        _err(f"finding index {args.index} out of range (1..{n})")
+        return 1
+    finding = report.findings[args.index - 1].to_dict()
+    try:
+        adj = FindingAdjudication(
+            fingerprint=finding_fingerprint(finding), finding_index=args.index,
+            decision=args.decision.replace("-", "_"), reviewer=args.reviewer,
+            reason=args.reason, timestamp=utc_now(),
+            detector=finding.get("detector", ""), category=finding.get("category", ""),
+        )
+    except ValueError as exc:
+        _err(str(exc))
+        return 1
+    AdjudicationStore(staged / "security" / "finding_adjudications.jsonl").record(adj)
+    print(f"finding #{args.index} ({adj.category}) adjudicated: {adj.decision} by {args.reviewer}")
+    print("Re-run `source-to-skill validate` to refresh REVIEW.md.")
     return 0
 
 
@@ -558,6 +592,16 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("old")
     p.add_argument("new")
     p.set_defaults(func=cmd_diff)
+
+    p = sub.add_parser("review-finding",
+                       help="adjudicate a source-scan security finding (audit-logged)")
+    p.add_argument("skill_dir")
+    p.add_argument("--index", type=int, required=True,
+                   help="1-based index into security/source_findings.jsonl")
+    p.add_argument("--decision", choices=("accepted", "false-positive"), required=True)
+    p.add_argument("--reviewer", required=True)
+    p.add_argument("--reason", required=True)
+    p.set_defaults(func=cmd_review_finding)
 
     p = sub.add_parser("review", help="print the review packet")
     p.add_argument("skill_dir")

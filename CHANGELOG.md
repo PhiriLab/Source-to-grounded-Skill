@@ -37,6 +37,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   scanning is now handled by GitHub's Default setup, and the committed
   workflow was redundant and still pinned to the old `master` branch.
 
+### Added
+- `review-finding` command: adjudicate a source-scan security finding as
+  `accepted` or `false-positive` with a reason, recorded to
+  `security/finding_adjudications.jsonl` and surfaced in REVIEW.md. The
+  immutable findings file is never edited. Closes the gap where a benign
+  source finding could be recorded but never formally cleared.
+
+### Fixed
+- Injection-detector specificity on procedural text: a capability-request
+  imperative is HIGH only when it reaches a *sensitive* target (shell,
+  credentials, token, network, agent-config paths); generic "open the
+  file" / "run the command" language produces no finding. Removes the
+  false-positive class that forced `--security permissive` on the SPSS
+  manual trial. Injection recall stays 1.0, false-positive rate 0.0.
+
+### Changed
+- `convert` now fails with a clear OCR hint when a source extracts fewer
+  than 30 words (a scanned/image PDF with no text layer), instead of
+  silently staging an empty run. Override with `--allow-thin-source`.
+
 ## [2.0.0] — 2026-07-22 (fork: source-to-grounded-skill)
 
 Fork of upstream book-to-skill at `68888e9`, transformed into a

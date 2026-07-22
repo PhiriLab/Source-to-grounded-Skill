@@ -32,7 +32,17 @@ def build_review_packet(
     citation_problems: list[str],
     uncited_paragraphs: list[str],
     extraction_warnings: list[str] | None = None,
+    finding_adjudications: dict[str, str] | None = None,
 ) -> str:
+    from book_to_skill.review.findings_review import finding_fingerprint
+
+    adjudications = finding_adjudications or {}
+
+    def _finding_line(f) -> str:
+        verdict = adjudications.get(finding_fingerprint(f.to_dict()))
+        tag = f"  [adjudicated: {verdict}]" if verdict else ""
+        return f"- [{f.risk.value}] {f.category} @ {f.source_id} {f.location}: {f.evidence}{tag}"
+
     integrity_flags = check_ledger_integrity(ledger)
     sections: list[str] = ["# Review packet", ""]
 
@@ -60,12 +70,10 @@ def build_review_packet(
         _line(c) for c in ledger if c.epistemic_status == "contested_claim"
     ], empty="No contested claims recorded — confirm the sources genuinely contain none.")
     add("Security findings (source scan)", [
-        f"- [{f.risk.value}] {f.category} @ {f.source_id} {f.location}: {f.evidence}"
-        for f in source_findings.at_or_above(Severity.LOW)
+        _finding_line(f) for f in source_findings.at_or_above(Severity.LOW)
     ])
     add("Security findings (generated output)", [
-        f"- [{f.risk.value}] {f.category} @ {f.source_id} {f.location}: {f.evidence}"
-        for f in output_findings.at_or_above(Severity.LOW)
+        _finding_line(f) for f in output_findings.at_or_above(Severity.LOW)
     ])
     add("Ledger validation problems", [f"- {p}" for p in ledger_problems])
     add("Unresolvable citations", [f"- {p}" for p in citation_problems])

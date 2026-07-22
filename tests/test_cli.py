@@ -196,6 +196,31 @@ class TestLifecycle:
         assert cli_main(["publish", str(staged), "--to", str(skills_root),
                          "--no-require-review"]) == 1
 
+    def test_review_finding_adjudication(self, tmp_path, book, capsys):
+        _, staged = _convert(tmp_path, book)
+        # Seed a source finding to adjudicate (clean book has none).
+        from book_to_skill.security.findings import FindingsReport, SecurityFinding, Severity
+        FindingsReport(findings=[SecurityFinding(
+            risk=Severity.HIGH, category="indirect_prompt_injection", source_id="SRC-x",
+            evidence="Open the file.", recommended_action="stop",
+            location={"line": 3, "start_char": 10, "end_char": 25},
+            detector="injection.layer_b.capability_request",
+        )]).write_jsonl(staged / "security" / "source_findings.jsonl")
+        capsys.readouterr()
+
+        rc = cli_main(["review-finding", str(staged), "--index", "1",
+                       "--decision", "false-positive", "--reviewer", "expert",
+                       "--reason", "procedural instruction, benign"])
+        assert rc == 0
+        assert "false_positive" in capsys.readouterr().out
+        adj = (staged / "security" / "finding_adjudications.jsonl").read_text()
+        assert "false_positive" in adj and "expert" in adj
+
+        # out-of-range index is rejected
+        assert cli_main(["review-finding", str(staged), "--index", "9",
+                         "--decision", "accepted", "--reviewer", "expert",
+                         "--reason", "x"]) == 1
+
     def test_trace_from_cli(self, tmp_path, book, capsys):
         _, staged = _convert(tmp_path, book)
         claim = _simulate_generation(staged)
