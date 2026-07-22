@@ -39,6 +39,10 @@ from book_to_skill.structure import detect_sections, sections_from_map
 
 GENERATOR_VERSION = "2.0.0-grounded"
 
+# Below this word count a source is almost certainly a failed extraction
+# (typically a scanned/image PDF with no text layer), not a real document.
+MIN_EXTRACTED_WORDS = 30
+
 SUBCOMMANDS = (
     "inspect", "scan", "convert", "validate", "trace", "diff",
     "review", "approve", "reject", "annotate", "mark-reviewed",
@@ -129,6 +133,20 @@ def cmd_convert(args) -> int:
 
     area = StagingArea(args.output, args.skill_id).create()
     results, extraction_errors = _extract_sources(args.sources, args.mode, args.install_missing)
+
+    # Empty-extraction guard: a source that yields almost no words is almost
+    # always a scanned/image PDF with no text layer (surfaced by the first
+    # real-world trial). Fail loudly with an OCR hint rather than silently
+    # staging an empty run.
+    thin = [(p, r) for p, r in results if r.get("words", 0) < MIN_EXTRACTED_WORDS]
+    if thin and not args.allow_thin_source:
+        names = ", ".join(f"{p.name} ({r.get('words', 0)} words)" for p, r in thin)
+        _err(f"near-empty extraction: {names}")
+        _err("This usually means a scanned/image PDF with no text layer — there "
+             "is nothing to ground claims against. OCR it first (e.g. "
+             "`ocrmypdf input.pdf output.pdf`) and convert the OCR'd file, or "
+             "pass --allow-thin-source to override.")
+        return 2
 
     sources: list[Source] = []
     all_findings = FindingsReport()
@@ -521,6 +539,9 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--local-extraction-only", action="store_true",
                    help="alias of --install-missing no")
     p.add_argument("--install-missing", choices=("ask", "yes", "no"), default="no")
+    p.add_argument("--allow-thin-source", action="store_true",
+                   help="proceed even if a source extracts almost no text "
+                        "(bypasses the scanned-PDF/OCR guard)")
     add_mode(p)
     p.set_defaults(func=cmd_convert)
 

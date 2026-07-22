@@ -113,6 +113,28 @@ class TestConvert:
         # Critical findings quarantine the source copy
         assert list((tmp_path / ".source-to-skill" / "quarantine").rglob("bad.txt"))
 
+    def test_thin_source_blocked_with_ocr_hint(self, tmp_path, capsys):
+        thin = tmp_path / "scan.txt"
+        thin.write_text("Title Page\n\n1\n\n2\n", encoding="utf-8")  # ~4 words
+        rc = cli_main([
+            "convert", str(thin), "--skill-id", "thin", "--output", str(tmp_path),
+        ])
+        assert rc == 2
+        err = capsys.readouterr().err
+        assert "near-empty extraction" in err and "ocrmypdf" in err
+        # nothing staged
+        assert not (tmp_path / ".source-to-skill" / "staging" / "thin"
+                    / "provenance" / "manifest.json").exists()
+
+    def test_thin_source_allowed_with_override(self, tmp_path):
+        thin = tmp_path / "scan.txt"
+        thin.write_text("Title Page\n\n1\n\n2\n", encoding="utf-8")
+        rc = cli_main([
+            "convert", str(thin), "--skill-id", "thin2", "--output", str(tmp_path),
+            "--allow-thin-source",
+        ])
+        assert rc == 0
+
     def test_structure_map_overrides_detection(self, tmp_path, book):
         smap = tmp_path / "map.yaml"
         smap.write_text(
