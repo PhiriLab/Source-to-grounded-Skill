@@ -2,6 +2,13 @@
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+# The distribution is named source-to-grounded-skill, but the importable
+# package is book_to_skill (kept for a clean upstream diff). Hatchling's
+# default file-selection heuristic looks for a directory matching the
+# project name and finds none, so name the package explicitly.
+[tool.hatch.build.targets.wheel]
+packages = ["book_to_skill"]
+
 [project]
 name = "source-to-grounded-skill"
 version = "2.0.0"
