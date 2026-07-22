@@ -3,15 +3,19 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "book-to-skill"
-version = "1.2.0"
-description = "Convert books and documents into structured, on-demand agent skills."
+name = "source-to-grounded-skill"
+version = "2.0.0"
+description = "Provenance-preserving scholarly knowledge compiler: convert books and documents into grounded, reviewable agent skills."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
+# PyYAML powers domain profiles and structure maps; the rest of the
+# pipeline stays stdlib-only like upstream.
+dependencies = ["pyyaml"]
 
 [project.scripts]
 book-to-skill = "book_to_skill.cli:main"
+source-to-skill = "book_to_skill.cli:main"
 
 [project.optional-dependencies]
 epub = ["ebooklib", "beautifulsoup4"]
