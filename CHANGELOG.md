@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI now triggers on pushes to `main` (the new default branch), so the
   test/lint/security jobs run on direct pushes there, not only on PRs.
 
+### Removed
+- The committed CodeQL workflow (`.github/workflows/codeql.yml`); code
+  scanning is now handled by GitHub's Default setup, and the committed
+  workflow was redundant and still pinned to the old `master` branch.
+
 ## [2.0.0] — 2026-07-22 (fork: source-to-grounded-skill)
 
 Fork of upstream book-to-skill at `68888e9`, transformed into a
